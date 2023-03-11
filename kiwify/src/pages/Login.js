@@ -15,6 +15,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const Login = () => {
+
   return (
     <>
       <Helmet>
@@ -51,7 +52,23 @@ const Login = () => {
                   .required("Esse campo é obrigatório"),
               })}
               onSubmit={(values, { setSubmitting, resetForm }) => {
-                console.log(values);
+                const storedUser = localStorage.getItem("user");
+                if (storedUser) {
+                  const user = JSON.parse(storedUser);
+                  if (
+                    values.email === user.email &&
+                    values.password === user.password
+                  ) {
+                    setSubmitting(false);
+                    alert("You have successfully logged in!");
+                  } else {
+                    setSubmitting(false);
+                    alert("Invalid email or password");
+                  }
+                } else {
+                  setSubmitting(false);
+                  alert("No user found. Please sign up first.");
+                }
                 setSubmitting(false);
                 resetForm();
               }}

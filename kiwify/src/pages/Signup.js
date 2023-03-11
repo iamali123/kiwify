@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Helmet } from "react-helmet";
@@ -7,6 +7,7 @@ import InputField from "./../components/Input/Input";
 import Button from "./../components/Button/Button";
 
 const Signup = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Helmet>
@@ -37,7 +38,7 @@ const Signup = () => {
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <Formik
-            initialValues={{ password: "", confirmEmail: "", email: "" }}
+            initialValues={{ email: "", confirmEmail: "", password: "" }}
             validationSchema={Yup.object({
               password: Yup.string().required("Esse campo é obrigatório"),
               email: Yup.string()
@@ -52,9 +53,10 @@ const Signup = () => {
                 ),
             })}
             onSubmit={(values, { setSubmitting, resetForm }) => {
-              console.log(values);
+              localStorage.setItem("user", JSON.stringify(values));
               setSubmitting(false);
               resetForm();
+              navigate('/');
             }}
           >
             {(formik) => (
