@@ -35,125 +35,150 @@ const Signup = () => {
           </div>
         </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <Formik
-          initialValues={{ password: "", remail: "", email: "" }}
-          validationSchema={Yup.object({
-            email: Yup.string()
-              .email("Invalid email address")
-              .required("Required")
-              .required("Required")
-          })}
-          onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+          <Formik
+            initialValues={{ password: "", confirmEmail: "", email: "" }}
+            validationSchema={Yup.object({
+              password: Yup.string().required("Esse campo é obrigatório"),
+              email: Yup.string()
+                .email("O e-mail deve ser válido")
+                .required("Esse campo é obrigatório"),
+              confirmEmail: Yup.string()
+                .email("O e-mail deve ser válido")
+                .required("Confirmar e-mail é obrigatório")
+                .oneOf(
+                  [Yup.ref("email"), null],
+                  "Os dois e-mails devem ser iguais."
+                ),
+            })}
+            onSubmit={(values, { setSubmitting, resetForm }) => {
+              console.log(values);
               setSubmitting(false);
-            }, 400);
-          }}
-        >
-          {(formik) => (
-            <form
-              onSubmit={formik.handleSubmit}
-              className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10"
-            >
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-5 mb-1 text-gray-700"
-                >
-                  E-mail
-                </label>
-                <InputField
-                  id="email"
-                  type="email"
-                  {...formik.getFieldProps("email")}
-                />
-                {formik.touched.email && formik.errors.email ? (
-                    <p className="mt-2 text-sm" style={{ color: "#FF0000" }}>{formik.errors.email}</p>
-                ) : null}
-               
-              </div>
-              <div className="mt-6">
-                <label
-                  htmlFor="repeat-email"
-                  className="block text-sm font-medium leading-5 mb-1 text-gray-700"
-                >
-                  Repetir e-mail
-                </label>
-                <InputField
-                  id="r-email"
-                  type="email"
-                  {...formik.getFieldProps("remail")}
-                />
-                {formik.touched.remail && formik.errors.remail ? (
-                  <div>{formik.errors.remail}</div>
-                ) : null}
-              </div>
-              <div className="mt-6">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium leading-5 mb-1 text-gray-700"
-                >
-                  Senha
-                </label>
-                <InputField type="password" name="password" />
-                <input
-                  id="password"
-                  type="text"
-                  {...formik.getFieldProps("password")}
-                />
-                {formik.touched.password && formik.errors.password ? (
-                  <div>{formik.errors.password}</div>
-                ) : null}
-              </div>
-              <div class="mt-6">
-                <label class="relative flex items-start mt-2">
-                  <div class="flex items-center h-5">
-                    <input
-                      type="checkbox"
-                      class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out cursor-pointer"
-                    />
-                  </div>
-                  <div class="ml-2 text-sm leading-5">
-                    <span class="font-medium text-gray-700">
-                      Eu li e aceito os
-                      <a
-                        href="https://kiwify.com.br/termos-de-uso"
-                        target="_blank"
-                        class="underline"
-                      >
-                        termos de uso
-                      </a>
-                      ,
-                      <a
-                        href="https://kiwify.com.br/licenca-de-uso-software"
-                        target="_blank"
-                        class="underline"
-                      >
-                        termos de licença de uso de software
-                      </a>
-                      ,
-                      <a
-                        href="https://kiwify.com.br/politica-de-conteudo"
-                        target="_blank"
-                        class="underline"
-                      >
-                        política de conteúdo
-                      </a>
-                      da Kiwify
-                    </span>
-                  </div>
-                </label>
-              </div>
-              <div className="mt-6">
-                <span className="block w-full rounded-md shadow-sm">
-                  <Button type="submit">Entrar</Button>
-                </span>
-              </div>
-            </form>
-          )}
-        </Formik>
-      </div>
+              resetForm();
+            }}
+          >
+            {(formik) => (
+              <form
+                onSubmit={formik.handleSubmit}
+                className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10"
+              >
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium leading-5 mb-1 text-gray-700"
+                  >
+                    E-mail
+                  </label>
+                  <InputField
+                    id="email"
+                    type="email"
+                    {...formik.getFieldProps("email")}
+                    className={` ${
+                      formik?.touched?.email &&
+                      formik?.errors?.email &&
+                      "border-[#FF0000]"
+                    }`}
+                  />
+                  {formik.touched.email && formik.errors.email ? (
+                    <p className="mt-1 text-sm" style={{ color: "#FF0000" }}>
+                      {formik.errors.email}
+                    </p>
+                  ) : null}
+                </div>
+                <div className="mt-6">
+                  <label
+                    htmlFor="repeat-email"
+                    className="block text-sm font-medium leading-5 mb-1 text-gray-700"
+                  >
+                    Repetir e-mail
+                  </label>
+                  <InputField
+                    id="confirmEmail"
+                    type="email"
+                    className={` ${
+                      formik?.touched?.confirmEmail &&
+                      formik?.errors?.confirmEmail &&
+                      "border-[#FF0000]"
+                    }`}
+                    {...formik.getFieldProps("confirmEmail")}
+                  />
+                  {formik.touched.confirmEmail && formik.errors.confirmEmail ? (
+                    <p className="mt-1 text-sm" style={{ color: "#FF0000" }}>
+                      {formik.errors.confirmEmail}
+                    </p>
+                  ) : null}
+                </div>
+                <div className="mt-6">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium leading-5 mb-1 text-gray-700"
+                  >
+                    Senha
+                  </label>
+                  <InputField
+                    id="password"
+                    type="text"
+                    className={` ${
+                      formik?.touched?.password &&
+                      formik?.errors?.password &&
+                      "border-[#FF0000]"
+                    }`}
+                    {...formik.getFieldProps("password")}
+                  />
+                  {formik.touched.password && formik.errors.password ? (
+                    <p className="mt-1 text-sm" style={{ color: "#FF0000" }}>
+                      {formik.errors.password}
+                    </p>
+                  ) : null}
+                </div>
+                <div class="mt-6">
+                  <label class="relative flex items-start mt-2">
+                    <div class="flex items-center h-5">
+                      <input
+                        type="checkbox"
+                        class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out cursor-pointer"
+                      />
+                    </div>
+                    <div class="ml-2 text-sm leading-5">
+                      <span class="font-medium text-gray-700">
+                        Eu li e aceito os
+                        <a
+                          href="https://kiwify.com.br/termos-de-uso"
+                          target="_blank"
+                          class="underline"
+                        >
+                          termos de uso
+                        </a>
+                        ,
+                        <a
+                          href="https://kiwify.com.br/licenca-de-uso-software"
+                          target="_blank"
+                          class="underline"
+                        >
+                          termos de licença de uso de software
+                        </a>
+                        ,
+                        <a
+                          href="https://kiwify.com.br/politica-de-conteudo"
+                          target="_blank"
+                          class="underline"
+                        >
+                          política de conteúdo
+                        </a>
+                        da Kiwify
+                      </span>
+                    </div>
+                  </label>
+                </div>
+                <div className="mt-6">
+                  <span className="block w-full rounded-md shadow-sm">
+                    <Button type="submit">Entrar</Button>
+                  </span>
+                </div>
+              </form>
+            )}
+          </Formik>
+        </div>
       </div>
     </>
   );
