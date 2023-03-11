@@ -1,67 +1,160 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Helmet } from "react-helmet";
+import InputField from "./../components/Input/Input";
+import Button from "./../components/Button/Button";
 
 const Signup = () => {
   return (
     <>
       <Helmet>
-        <title>Sign Up</title>
+        <title>Cadastro</title>
       </Helmet>
-
-      <Formik
-        initialValues={{ firstName: "", lastName: "", email: "" }}
-        validationSchema={Yup.object({
-          firstName: Yup.string()
-            .max(15, "Must be 15 characters or less")
-            .required("Required"),
-          lastName: Yup.string()
-            .max(20, "Must be 20 characters or less")
-            .required("Required"),
-          email: Yup.string()
-            .email("Invalid email address")
-            .required("Required"),
-        })}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
-        }}
-      >
-        {(formik) => (
-          <form onSubmit={formik.handleSubmit}>
-            <label htmlFor="firstName">First Name</label>
-            <input
-              id="firstName"
-              type="text"
-              {...formik.getFieldProps("firstName")}
+      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div>
+          <div className="sm:mx-auto sm:w-full sm:max-w-md">
+            <img
+              src={require("../assets/img/kiwify-green-logo.png")}
+              alt="kiwify-green-logo"
+              className="mx-auto h-12 w-auto"
             />
-            {formik.touched.firstName && formik.errors.firstName ? (
-              <div>{formik.errors.firstName}</div>
-            ) : null}
+            <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
+              Criar nova conta
+            </h2>
+            <p className="mt-2 text-center text-base leading-5 text-gray-600">
+              Ou
+              <Link
+                to={"/"}
+                className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none ml-1 focus:underline transition ease-in-out duration-150"
+              >
+                entrar na sua conta existente
+              </Link>
+            </p>
+          </div>
+        </div>
 
-            <label htmlFor="lastName">Last Name</label>
-            <input
-              id="lastName"
-              type="text"
-              {...formik.getFieldProps("lastName")}
-            />
-            {formik.touched.lastName && formik.errors.lastName ? (
-              <div>{formik.errors.lastName}</div>
-            ) : null}
-
-            <label htmlFor="email">Email Address</label>
-            <input id="email" type="email" {...formik.getFieldProps("email")} />
-            {formik.touched.email && formik.errors.email ? (
-              <div>{formik.errors.email}</div>
-            ) : null}
-
-            <button type="submit">Submit</button>
-          </form>
-        )}
-      </Formik>
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <Formik
+          initialValues={{ password: "", remail: "", email: "" }}
+          validationSchema={Yup.object({
+            email: Yup.string()
+              .email("Invalid email address")
+              .required("Required")
+              .required("Required")
+          })}
+          onSubmit={(values, { setSubmitting }) => {
+            setTimeout(() => {
+              alert(JSON.stringify(values, null, 2));
+              setSubmitting(false);
+            }, 400);
+          }}
+        >
+          {(formik) => (
+            <form
+              onSubmit={formik.handleSubmit}
+              className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10"
+            >
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium leading-5 mb-1 text-gray-700"
+                >
+                  E-mail
+                </label>
+                <InputField
+                  id="email"
+                  type="email"
+                  {...formik.getFieldProps("email")}
+                />
+                {formik.touched.email && formik.errors.email ? (
+                    <p className="mt-2 text-sm" style={{ color: "#FF0000" }}>{formik.errors.email}</p>
+                ) : null}
+               
+              </div>
+              <div className="mt-6">
+                <label
+                  htmlFor="repeat-email"
+                  className="block text-sm font-medium leading-5 mb-1 text-gray-700"
+                >
+                  Repetir e-mail
+                </label>
+                <InputField
+                  id="r-email"
+                  type="email"
+                  {...formik.getFieldProps("remail")}
+                />
+                {formik.touched.remail && formik.errors.remail ? (
+                  <div>{formik.errors.remail}</div>
+                ) : null}
+              </div>
+              <div className="mt-6">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium leading-5 mb-1 text-gray-700"
+                >
+                  Senha
+                </label>
+                <InputField type="password" name="password" />
+                <input
+                  id="password"
+                  type="text"
+                  {...formik.getFieldProps("password")}
+                />
+                {formik.touched.password && formik.errors.password ? (
+                  <div>{formik.errors.password}</div>
+                ) : null}
+              </div>
+              <div class="mt-6">
+                <label class="relative flex items-start mt-2">
+                  <div class="flex items-center h-5">
+                    <input
+                      type="checkbox"
+                      class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out cursor-pointer"
+                    />
+                  </div>
+                  <div class="ml-2 text-sm leading-5">
+                    <span class="font-medium text-gray-700">
+                      Eu li e aceito os
+                      <a
+                        href="https://kiwify.com.br/termos-de-uso"
+                        target="_blank"
+                        class="underline"
+                      >
+                        termos de uso
+                      </a>
+                      ,
+                      <a
+                        href="https://kiwify.com.br/licenca-de-uso-software"
+                        target="_blank"
+                        class="underline"
+                      >
+                        termos de licença de uso de software
+                      </a>
+                      ,
+                      <a
+                        href="https://kiwify.com.br/politica-de-conteudo"
+                        target="_blank"
+                        class="underline"
+                      >
+                        política de conteúdo
+                      </a>
+                      da Kiwify
+                    </span>
+                  </div>
+                </label>
+              </div>
+              <div className="mt-6">
+                <span className="block w-full rounded-md shadow-sm">
+                  <Button type="submit">Entrar</Button>
+                </span>
+              </div>
+            </form>
+          )}
+        </Formik>
+      </div>
+      </div>
     </>
   );
 };
