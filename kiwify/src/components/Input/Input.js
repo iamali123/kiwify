@@ -3,7 +3,7 @@ export default function InputField({ className, ...restProps }) {
     <input
       {...restProps}
       name={restProps?.name}
-      className={`border py-3 px-4 rounded-lg w-full outline-none ${className}`}
+      className={`form-input block py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5 w-full ${className}`}
     />
   );
 }
